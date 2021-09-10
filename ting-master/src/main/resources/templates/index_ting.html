@@ -1,0 +1,34 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<!-- Header-->
+<head>
+    <div th:replace="/layout/head.html :: fragment-header"></div>
+</head>
+<body>
+<div th:replace="/layout/head.html :: fragment-header-menu"></div>
+<section class="bg-light py-5">
+    <div class="container px-5 my-5 px-5">
+        <div class="row gx-5 justify-content-center">
+            <div class="col-lg-6">
+<div class="d-grid gap-3 d-sm-flex justify-content-sm-center">
+    <a class="btn btn-outline-light btn-lg px-4" th:href="@{/random}">
+        <img src="img/random_btn_test.JPG" th:src="@{/img/random_btn_test.JPG}"></a>
+</div>
+<div class="d-grid gap-3 d-sm-flex justify-content-sm-center">
+    <a class="btn btn-outline-light btn-lg px-4" th:href="@{/select}"><img src="img/select_btn_test.JPG"></a>
+</div>
+<div class="d-grid gap-3 d-sm-flex justify-content-sm-center">
+    <a class="btn btn-outline-light btn-lg px-4" th:href="@{/open}"><img src="img/open_btn_test.JPG"></a>
+</div>
+<form id="contactForm">
+<div class="d-grid gap-3 d-sm-flex justify-content-sm-center">
+    <textarea class="form-control-1" id="message" type="text" placeholder="Enter your message here..." style="height: 5rem" data-sb-validations="required"></textarea>
+    <button class="btn btn-primary btn-lg" id="submitButton"  style="margin-top: 6rem" onclick=" location.href='/index'">보내기</button>
+</div>
+</form>
+</div></div></div></section>
+<footer>
+    <div th:replace="/layout/footer.html :: fragment-footer"></div>
+</footer>
+</body>
+</html>
