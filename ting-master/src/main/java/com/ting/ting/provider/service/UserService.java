@@ -1,4 +1,4 @@
-package com.ting.ting.service;
+package com.ting.ting.provider.service;
 
 import com.ting.ting.model.Role;
 import com.ting.ting.model.User;

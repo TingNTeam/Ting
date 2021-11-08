@@ -1,4 +1,4 @@
-package com.ting.ting.controller;
+package com.ting.ting.web;
 
 import com.ting.ting.model.User;
 import com.ting.ting.repository.UserRepository;
