@@ -1,6 +1,6 @@
 package com.ting.ting.web;
 
-import com.ting.ting.model.User;
+import com.ting.ting.entity.User;
 import com.ting.ting.provider.service.UserService;
 import com.ting.ting.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

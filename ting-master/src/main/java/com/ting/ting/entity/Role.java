@@ -1,4 +1,4 @@
-package com.ting.ting.model;
+package com.ting.ting.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
