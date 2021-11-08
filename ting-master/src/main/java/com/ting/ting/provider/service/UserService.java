@@ -1,28 +1,19 @@
 package com.ting.ting.provider.service;
 
-import com.ting.ting.model.Role;
-import com.ting.ting.model.User;
+import com.ting.ting.core.service.UserServiceinterface;
+import com.ting.ting.entity.Role;
+import com.ting.ting.entity.User;
 import com.ting.ting.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserService {
-
-    @Autowired
+@RequiredArgsConstructor
+public class UserService implements UserServiceinterface{
     private UserRepository userRepository;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
-    public User save(User user){
-        String encodedPassword = passwordEncoder.encode(user.getPassword());
-        user.setPassword(encodedPassword);
-        user.setEnabled(true);
-        Role role = new Role();
-        role.setId(1l);
-        user.getRoles().add(role);
-        return userRepository.save(user);
-    }
+
+
+
 }
