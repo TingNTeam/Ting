@@ -35,11 +35,11 @@ public class AccountController {
         return "/account/register";
     }
 
-    @PostMapping("/register")
-    public String register(User user) {
-        userService.save(user);
-        return  "redirect:/";
-    }
+//    @PostMapping("/register")
+//    public String register(User user) {
+//        userService.save(user);
+//        return  "redirect:/";
+//    }
 
     @GetMapping("/myinfo")
     public String myinfo(Model model, HttpSession session){
