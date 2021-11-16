@@ -1,8 +1,15 @@
 package com.ting.ting.web;
 
 import com.ting.ting.entity.User;
+import com.ting.ting.provider.service.UserService;
 import com.ting.ting.repository.UserRepository;
+import com.ting.ting.web.dto.CommonResponse;
+import com.ting.ting.web.dto.RequestUser;
+import com.ting.ting.web.dto.ResponseUser;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -11,100 +18,31 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
+import java.util.HashMap;
 
-@Controller
-@RequestMapping("/user")
+@RestController
+@RequiredArgsConstructor
 public class UserController {
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final UserService userService;
 
-    //    아이디 찾기
-    @GetMapping("/find_id")
-    public String find_id(Model model, HttpSession session,
-                          @RequestParam(required = false, defaultValue = "", value = "school") String school,
-                          @RequestParam(required = false, defaultValue = "", value = "number") Long number,
-                          @RequestParam(required = false, defaultValue = "", value = "name") String name) {
-        User user = userRepository.findByNameAndNumberAndSchool(name, number, school);
-        model.addAttribute("user", user);
-        return "/user/find_id";
+    @PostMapping("/user/login")
+    public ResponseEntity<CommonResponse> login(@Valid @RequestBody RequestUser.Login requestLoginDto) {
+        //service만들고 예외처리하기
+        ResponseUser.Login token = userService.login(requestLoginDto);
+
+        //내부에 키와 값을 저장하는 자료 구조
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("accessToken", token.getAccessToken());
+        map.put("refreshToken", token.getRefreshToken());
+
+                //  .status(HttpStatus.OK.value()) 이거 없어도 되는지 확인하기
+                CommonResponse response = CommonResponse.builder()
+                .status(HttpStatus.OK.value())
+                .message("성공")
+                .list(map)
+                .build();
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    //    비밀번호변경
-    @GetMapping("/changepassword")
-    public String changepassword(Model model, HttpSession session,
-                                 @RequestParam(required = false, defaultValue = "", value = "present_pass") String present_pass,
-                                 @RequestParam(required = false, defaultValue = "", value = "new_pass") String new_pass,
-                                 @RequestParam(required = false, defaultValue = "", value = "new_pass_ck") String new_pass_ck) {
-//        세션에 저장된 값 가져오기
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserDetails userDetails = (UserDetails) principal;
-        String username = ((UserDetails) principal).getUsername();
-        User user = userRepository.findByUsername(username);
-        model.addAttribute("user", user);
-//        현재 비밀번호 확인
-        if (passwordEncoder.matches(present_pass, user.getPassword())) {
-//            새로운 비밀번호 확인
-            if (new_pass.equals(new_pass_ck)) {
-                user.setPassword(passwordEncoder.encode(new_pass));
-                userRepository.save(user);
-                return "redirect:/account/myinfo";
-            }
-        }
-        return "/user/changepassword";
-    }
-
-    @PostMapping("/changepassword/{username}")
-    public String changepwd(@PathVariable String username,
-                            @RequestParam(required = false, defaultValue = "", value = "new_pass") String new_pass,
-                            @RequestParam(required = false, defaultValue = "", value = "new_pass_ck") String new_pass_ck) {
-
-        if (!new_pass.isEmpty()) {
-            User user = userRepository.findByUsername(username);
-            user.setPassword(passwordEncoder.encode(new_pass));
-            userRepository.save(user);
-            return "redirect:/account/login";
-        }
-        return "/user/changepassword";
-
-    }
-
-    //비밀번호 찾기
-    @GetMapping("/findpassword")
-    public String findpassword(Model model, HttpSession session,
-                               @RequestParam(required = false, defaultValue = "", value = "username") String username,
-                               @RequestParam(required = false, defaultValue = "", value = "number") String number) {
-        if (userRepository.findByUsername(username) != null) {
-            User user = userRepository.findByUsername(username);
-            String u_name = user.getUsername();
-            model.addAttribute("user", user);
-            return "/user/findpassword";
-        }
-        return "/user/findpassword";
-    }
-
-    //    비밀번호변경
-    @GetMapping("/kproject")
-    public String kproject(Model model, HttpSession session,
-                           @RequestParam(required = false, defaultValue = "", value = "present_pass") String present_pass,
-                           @RequestParam(required = false, defaultValue = "", value = "new_pass") String new_pass,
-                           @RequestParam(required = false, defaultValue = "", value = "new_pass_ck") String new_pass_ck) {
-//        세션에 저장된 값 가져오기
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserDetails userDetails = (UserDetails) principal;
-        String username = ((UserDetails) principal).getUsername();
-        User user = userRepository.findByUsername(username);
-        model.addAttribute("user", user);
-//        현재 비밀번호 확인
-        if (passwordEncoder.matches(present_pass, user.getPassword())) {
-//            새로운 비밀번호 확인
-            if (new_pass.equals(new_pass_ck)) {
-                user.setPassword(new_pass_ck);
-                userRepository.save(user);
-                return "redirect:/account/myinfo";
-            }
-        }
-        return "/user/kproject";
-    }
 }
