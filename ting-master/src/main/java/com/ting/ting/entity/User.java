@@ -1,6 +1,7 @@
 package com.ting.ting.entity;
 
 import com.ting.ting.core.type.MBTIType;
+import lombok.Builder;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -39,4 +40,11 @@ public class User {
     @Enumerated(EnumType.STRING)
     @Column(name = "mbti")
     private MBTIType mbti;
+
+    @Builder
+    public User(String email, String password, String salt) {
+        this.email = email;
+        this.password = password;
+        this.salt = salt;
+    }
 }

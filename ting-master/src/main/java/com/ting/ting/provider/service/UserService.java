@@ -4,6 +4,7 @@ import com.ting.ting.core.service.UserServiceinterface;
 import com.ting.ting.entity.Role;
 import com.ting.ting.entity.User;
 import com.ting.ting.exception.errors.LoginFailedException;
+import com.ting.ting.provider.security.JwtAuthTokenProvider;
 import com.ting.ting.repository.UserRepository;
 import com.ting.ting.util.SHA256Util;
 import com.ting.ting.web.dto.RequestUser;
@@ -11,13 +12,18 @@ import com.ting.ting.web.dto.ResponseUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
-import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
 public class UserService implements UserServiceinterface{
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final JwtAuthTokenProvider jwtAuthTokenProvider;
+
+    @Transactional
+    @Override
+    public void register(RequestUser.Register registerDto) {
+
+    }
+
 
     @Transactional
     @Override
