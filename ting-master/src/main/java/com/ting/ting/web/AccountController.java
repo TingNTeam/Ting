@@ -1,8 +1,10 @@
 package com.ting.ting.web;
 
 import com.ting.ting.entity.User;
+import com.ting.ting.provider.security.JwtAuthTokenProvider;
 import com.ting.ting.provider.service.UserService;
 import com.ting.ting.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,28 +13,25 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpSession;
 
-@Controller
-@RequestMapping("/account")
+@RestController
+@RequiredArgsConstructor
 public class AccountController {
+    private final UserService userService;
+    private final JwtAuthTokenProvider jwtAuthTokenProvider;
 
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @GetMapping("/login")
+    @PostMapping("/user/login")
     public String login() {
 
-        return "/account/login";
+        return "/user/login";
     }
 
-    @GetMapping("/register")
+    @PostMapping("/user/register")
     public String register() {
-        return "/account/register";
+        return "/user/register";
     }
 
 //    @PostMapping("/register")
@@ -43,16 +42,7 @@ public class AccountController {
 
     @GetMapping("/myinfo")
     public String myinfo(Model model, HttpSession session){
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserDetails userDetails =(UserDetails)principal;
-        String username = ((UserDetails) principal).getUsername();
-       User user = userRepository.findByUsername(username);
-            model.addAttribute("user",user);
-//        Enumeration enums = session.getAttributeNames();
-//        while (enums.hasMoreElements()){
-//            String key = (String)enums.nextElement();
-//            System.out.println(key+": "+ session.getAttribute(key));
-//        }
+
         return "/account/myinfo";
     }
 }

@@ -21,7 +21,7 @@ public class AuthInterceptor implements HandlerInterceptor
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
         if(request.getMethod().equals("OPTIONS")) {
-            //request method가 OPTIONS일 경우 JWT를 체크하지 않는 방향으로(개발 블로그 참고)
+            //)request method가 OPTIONS일 경우 JWT를 체크하지 않는 방향으로(개발 블로그 참고
             return true;
         }
         Optional<String> token = jwtAuthTokenProvider.resolveToken(request);
