@@ -33,8 +33,8 @@ public class User {
     @Column(name = "nickname")
     private String nickname;
 
-    @Column(name="age")
-    private String age;
+    @Column(name="birth")
+    private String birth;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "mbti")
