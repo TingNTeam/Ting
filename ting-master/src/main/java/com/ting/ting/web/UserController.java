@@ -1,9 +1,14 @@
 package com.ting.ting.web;
 
 import com.ting.ting.entity.User;
+import com.ting.ting.provider.service.UserService;
 import com.ting.ting.provider.security.JwtAuthTokenProvider;
 import com.ting.ting.provider.service.UserService;
 import com.ting.ting.repository.UserRepository;
+import com.ting.ting.web.dto.CommonResponse;
+import com.ting.ting.web.dto.RequestUser;
+import com.ting.ting.web.dto.ResponseUser;
+import lombok.RequiredArgsConstructor;
 import com.ting.ting.web.dto.CommonResponse;
 import com.ting.ting.web.dto.RequestUser;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +23,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
+import java.util.HashMap;
 import javax.validation.Valid;
 
 @RestController
@@ -37,19 +44,26 @@ public class UserController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    //    아이디 찾기
-    @GetMapping("/find_id")
-    public String find_id(){
+    @PostMapping("/user/login")
+    public ResponseEntity<CommonResponse> login(@Valid @RequestBody RequestUser.Login requestLoginDto) {
+        //service만들고 예외처리하기
+        ResponseUser.Login token = userService.login(requestLoginDto);
 
-        return "/find_id";
+        //내부에 키와 값을 저장하는 자료 구조
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("accessToken", token.getAccessToken());
+        map.put("refreshToken", token.getRefreshToken());
+
+                //  .status(HttpStatus.OK.value()) 이거 없어도 되는지 확인하기
+                CommonResponse response = CommonResponse.builder()
+                .status(HttpStatus.OK.value())
+                .message("성공")
+                .list(map)
+                .build();
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    //    비밀번호변경
-    @GetMapping("/changepassword")
-    public String changepassword(){
-        return "/changepassword";
-    }
-
+    //비밀번호 변경
     @PostMapping("/changepassword/{username}")
     public String changepwd(){
         return "/changepassword/{username}";
