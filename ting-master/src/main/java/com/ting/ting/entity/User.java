@@ -47,4 +47,8 @@ public class User {
         this.password = password;
         this.salt = salt;
     }
+
+    public void changeRefreshToken(String refreshToken){
+        this.refreshToken = refreshToken;
+    }
 }

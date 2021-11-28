@@ -1,9 +1,10 @@
 package com.ting.ting.provider.service;
 
+import com.ting.ting.core.security.role.Role;
 import com.ting.ting.core.service.UserServiceinterface;
-import com.ting.ting.entity.Role;
 import com.ting.ting.entity.User;
 import com.ting.ting.exception.errors.LoginFailedException;
+import com.ting.ting.provider.security.JwtAuthToken;
 import com.ting.ting.provider.security.JwtAuthTokenProvider;
 import com.ting.ting.repository.UserRepository;
 import com.ting.ting.util.SHA256Util;
@@ -11,6 +12,12 @@ import com.ting.ting.web.dto.RequestUser;
 import com.ting.ting.web.dto.ResponseUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -40,13 +47,41 @@ public class UserService implements UserServiceinterface{
             String encryptedPassword = SHA256Util.getEncrypt(requestLoginDto.getPassword(), salt);
             //비교
             user = userRepository.findByEmailAndPassword(requestLoginDto.getEmail(), encryptedPassword);
-            //비밀번호가 맞지 않을 경우
-        if(user == null){
-            throw new LoginFailedException();
-        }
-        else{
-        }
+            ResponseUser.Login login = null;
+            if(user != null ){
+                //로그인 성공
+                String refreshToken = createRefreshToken(user.getEmail());
+                login = ResponseUser.Login.builder()
+                        .accessToken(createAccessToken(user.getEmail()))
+                        .refreshToken(refreshToken)
+                        .build();
 
+                // 로그인 때마다 refresh token 업데이트
+                user.changeRefreshToken(refreshToken);
+            }
+            else{
+                //비밀 번호가 맞지 않음
+                throw new LoginFailedException();
+            }
+        return  Optional.ofNullable(login);
     }
 
+    @Override
+    public String createAccessToken(String id){
+        //만료 기간 설정 (생성으로부터 30분동안)
+        //Instant -> 컴퓨터가 알아보기 쉽게 표현하기 위한 형태
+        Date expiredDate = Date.from(LocalDateTime.now().plusMinutes(30).atZone(ZoneId.systemDefault()).toInstant());
+        //토큰 발급, 사용자 권한으로
+        JwtAuthToken accessToken = jwtAuthTokenProvider.createAuthToken(id, Role.USER.getCode(),expiredDate);
+        return accessToken.getToken();
+    }
+
+    @Override
+    public String createRefreshToken(String id){
+        //refreshToken 1년 기한으로 설정
+        //이게 만료 되면 사용자는 새로 로그인해야함
+        Date expiredDate = Date.from(LocalDateTime.now().plusYears(1).atZone(ZoneId.systemDefault()).toInstant());
+        JwtAuthToken refreshToken = jwtAuthTokenProvider.createAuthToken(id, Role.USER.getCode(),expiredDate);
+        return refreshToken.getToken();
+    }
 }
