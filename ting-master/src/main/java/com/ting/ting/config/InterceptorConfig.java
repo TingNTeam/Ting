@@ -15,7 +15,7 @@ public class InterceptorConfig implements WebMvcConfigurer {
     private final AuthInterceptor authInterceptor;
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        List<String> excludePatterns = Arrays.asList("/manager/login","/manager/register","/dev/**");
+        List<String> excludePatterns = Arrays.asList("/user/login","/user/register","/dev/**");
         registry.addInterceptor(authInterceptor)
                 .addPathPatterns("/**")
                 .excludePathPatterns(excludePatterns); // 경로지정하기
