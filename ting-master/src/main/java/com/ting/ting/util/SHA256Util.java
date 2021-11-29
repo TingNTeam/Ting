@@ -14,7 +14,7 @@ public class SHA256Util {
 
     public static String getEncrypt(String source, byte[] salt) {
 
-        String result = ""; // 결과를 담을 객체
+        String result = ""; // 결과를 담을    객체
 
         byte[] a = source.getBytes(); // 입력받은 비밀번호를 byte 배열로 변환한다
         byte[] bytes = new byte[a.length + salt.length]; // 바이트 배열의 길이는 비밀번호 길이 + salt 길이
