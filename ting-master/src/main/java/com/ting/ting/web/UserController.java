@@ -40,6 +40,7 @@ public class UserController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    //로그인
     @PostMapping("/user/login")
     public ResponseEntity<CommonResponse> login(@Valid @RequestBody RequestUser.Login requestLoginDto) {
         //service만들고 예외처리하기
@@ -57,19 +58,6 @@ public class UserController {
                 .list(map)
                 .build();
         return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
-    //비밀번호 변경
-    @PostMapping("/changepassword/{username}")
-    public String changepwd(){
-        return "/changepassword/{username}";
-
-    }
-
-    //비밀번호 찾기
-    @GetMapping("/findpassword")
-    public String findpassword(){
-        return "/findpassword";
     }
 
 }
