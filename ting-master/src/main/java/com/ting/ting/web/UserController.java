@@ -1,6 +1,7 @@
 package com.ting.ting.web;
 
 import com.ting.ting.entity.User;
+import com.ting.ting.exception.errors.LoginFailedException;
 import com.ting.ting.provider.service.UserService;
 import com.ting.ting.provider.security.JwtAuthTokenProvider;
 import com.ting.ting.provider.service.UserService;
@@ -47,7 +48,7 @@ public class UserController {
     @PostMapping("/user/login")
     public ResponseEntity<CommonResponse> login(@Valid @RequestBody RequestUser.Login requestLoginDto) {
         //service만들고 예외처리하기
-        ResponseUser.Login token = userService.login(requestLoginDto);
+        ResponseUser.Login token = userService.login(requestLoginDto).orElseThrow(()-> new LoginFailedException());
 
         //내부에 키와 값을 저장하는 자료 구조
         HashMap<String, Object> map = new HashMap<>();
