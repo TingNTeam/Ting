@@ -2,6 +2,7 @@ package com.ting.ting.web;
 
 import com.ting.ting.entity.User;
 import com.ting.ting.exception.errors.LoginFailedException;
+import com.ting.ting.exception.errors.RegisterFailedException;
 import com.ting.ting.provider.service.UserService;
 import com.ting.ting.provider.security.JwtAuthTokenProvider;
 import com.ting.ting.provider.service.UserService;
@@ -32,6 +33,8 @@ public class UserController {
     //회원가입
     @PostMapping("/user/register")
     public ResponseEntity<CommonResponse> requestRegister(@Valid @RequestBody RequestUser.Register registerDto){
+        //userService로 넘겨주기(선언 안해주면 Service단으로 안넘어간다)
+        userService.register(registerDto);
 
         CommonResponse response = CommonResponse.builder()
                 .status(HttpStatus.OK.value())
