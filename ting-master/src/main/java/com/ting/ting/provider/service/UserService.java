@@ -5,6 +5,7 @@ import com.ting.ting.core.service.UserServiceinterface;
 import com.ting.ting.core.type.MBTIType;
 import com.ting.ting.entity.User;
 import com.ting.ting.exception.errors.LoginFailedException;
+import com.ting.ting.exception.errors.RegisterFailedException;
 import com.ting.ting.provider.security.JwtAuthToken;
 import com.ting.ting.provider.security.JwtAuthTokenProvider;
 import com.ting.ting.repository.UserRepository;
@@ -14,9 +15,9 @@ import com.ting.ting.web.dto.ResponseUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.jws.soap.SOAPBinding;
-import javax.transaction.Transactional;
+
 import java.awt.print.Pageable;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -25,14 +26,32 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class UserService implements UserServiceinterface{
+public class UserService implements UserServiceinterface {
     private final UserRepository userRepository;
     private final JwtAuthTokenProvider jwtAuthTokenProvider;
 
     @Transactional
     @Override
     public void register(RequestUser.Register registerDto) {
-
+        User user = userRepository.findByEmail(registerDto.getEmail());
+        if (user != null) {
+            //존재하는 아이디
+            throw new RegisterFailedException();
+        }
+        //salt 생성
+        String salt = SHA256Util.generateSalt();
+        //sha256으로 솔트와 함께 암호화
+        String encryptedPassword = SHA256Util.getEncrypt(registerDto.getPassword(), salt);
+        //db에 넣기
+        user = User.builder()
+                .email(registerDto.getEmail())
+                .password(encryptedPassword)
+                .salt(salt)
+                .name(registerDto.getName())
+                .nickname(registerDto.getNickname())
+                .birth(registerDto.getBirth())
+                .build();
+        userRepository.save(user);
     }
 
     @Transactional

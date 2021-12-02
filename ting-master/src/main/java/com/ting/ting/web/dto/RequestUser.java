@@ -1,9 +1,13 @@
 package com.ting.ting.web.dto;
 
+import com.ting.ting.core.security.role.Role;
 import com.ting.ting.core.type.MBTIType;
 import lombok.Builder;
 import lombok.Data;
 
+import javax.persistence.Column;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.validation.constraints.NotEmpty;
 
 public class RequestUser {
@@ -15,6 +19,14 @@ public class RequestUser {
         private String email;
         @NotEmpty(message = "비밀번호 입력이 되어있지 않음")
         private String password;
+        @NotEmpty(message = "이름을 입력해주세요")
+        private String name;
+        @NotEmpty(message = "닉네임을 입력해주세요")
+        private String nickname;
+        @NotEmpty(message = "생년월일을 입력해주세요")
+        private String birth;
+
+        private MBTIType mbti;
     }
 
     @Builder
