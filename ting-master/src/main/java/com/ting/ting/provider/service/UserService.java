@@ -2,7 +2,9 @@ package com.ting.ting.provider.service;
 
 import com.ting.ting.core.security.role.Role;
 import com.ting.ting.core.service.UserServiceinterface;
+import com.ting.ting.core.type.MBTIType;
 import com.ting.ting.entity.User;
+import com.ting.ting.exception.errors.CustomJwtRuntimeException;
 import com.ting.ting.exception.errors.LoginFailedException;
 import com.ting.ting.exception.errors.RegisterFailedException;
 import com.ting.ting.provider.security.JwtAuthToken;
@@ -12,6 +14,7 @@ import com.ting.ting.util.SHA256Util;
 import com.ting.ting.web.dto.RequestUser;
 import com.ting.ting.web.dto.ResponseUser;
 import lombok.RequiredArgsConstructor;
+import org.apache.tomcat.websocket.AuthenticationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -83,6 +86,21 @@ public class UserService implements UserServiceinterface {
                 throw new LoginFailedException();
             }
         return  Optional.ofNullable(login);
+    }
+
+    @Transactional
+    @Override
+    public void mbtiupdate(MBTIType mbti, String email){
+        //유저 엔티티를 꺼낸다
+        User user = userRepository.findByEmail(email);
+
+        if(user == null) {
+            throw new CustomJwtRuntimeException();
+        }
+        user = User.builder()
+                .mbti(mbti)
+                .build();
+        userRepository.save(user);
     }
 
     @Override

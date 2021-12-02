@@ -1,5 +1,6 @@
 package com.ting.ting.core.service;
 
+import com.ting.ting.core.type.MBTIType;
 import com.ting.ting.web.dto.RequestUser;
 import com.ting.ting.web.dto.ResponseUser;
 
@@ -10,4 +11,5 @@ public interface UserServiceinterface {
     Optional<ResponseUser.Login> login(RequestUser.Login requestLoginDto);
     String createAccessToken(String id);
     String createRefreshToken(String id);
+    void mbtiupdate(MBTIType mbti,String email);
 }
