@@ -10,6 +10,7 @@ import java.awt.print.Pageable;
 public interface UserRepository extends JpaRepository<User, Long> {
     User findByEmail(String email);
     User findByEmailAndPassword(String email, String password);
+    User findByMBTI(MBTIType mbti);
     Page<User> findByMbti(MBTIType mbtiType, Pageable pageable);
     Page<User> findByNickname(String nickname, Pageable pageable);
 }

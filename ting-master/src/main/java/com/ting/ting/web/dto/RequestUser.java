@@ -37,4 +37,10 @@ public class RequestUser {
         @NotEmpty(message = "비밀번호를 입력하시오.")
         private String password;
     }
+
+    @Builder
+    @Data
+    public static class MbtiUpdate{
+        private MBTIType mbti;
+    }
 }
