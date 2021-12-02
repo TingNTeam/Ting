@@ -14,6 +14,8 @@ import com.ting.ting.web.dto.CommonResponse;
 import com.ting.ting.web.dto.RequestUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,7 +27,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.awt.print.Pageable;
 import java.util.HashMap;
+import java.util.List;
 import javax.validation.Valid;
 
 @RestController
@@ -64,5 +68,19 @@ public class UserController {
                 .build();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+    //검색
+    @GetMapping("/user/search")
+    private ResponseEntity<CommonResponse> getSearchList(
+            @RequestParam("type") String type, @RequestParam("keyword") String keyword,
+            @PageableDefault Pageable pageable){
 
+        Page<ResponseUser.UserSearch> searchresults = userService.getUserSearch(type, keyword, pageable);
+
+        CommonResponse response = CommonResponse.builder()
+                .status(HttpStatus.OK.value())
+                .message("성공")
+                .list(searchresults)
+                .build();
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 }
