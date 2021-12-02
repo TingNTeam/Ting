@@ -115,6 +115,7 @@ public class UserService implements UserServiceinterface {
                 Page<User> users_mbti = userRepository.findByMbti(MBTIType.ESTJ, pageable);
                 return users_mbti.map(ResponseUser.UserSearch::of);
             }
+
                 //nickname으로 검색했을 경우
                 Page<User> user_nick = userRepository.findByNickname(keyword,pageable);
                 return user_nick.map(ResponseUser.UserSearch::of);
