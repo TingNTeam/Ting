@@ -3,6 +3,7 @@ package com.ting.ting.provider.security;
 import com.ting.ting.core.security.AuthTokenProvider;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;

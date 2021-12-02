@@ -99,10 +99,12 @@ public class UserService implements UserServiceinterface {
         if(user == null) {
             throw new CustomJwtRuntimeException();
         }
-        user = User.builder()
-                .mbti(mbti)
-                .build();
-        userRepository.save(user);
+        user.mbtiupdate(mbti);
+    }
+
+    @Override
+    public Page<ResponseUser.UserSearch> getUserSearch(String type, String keyword, Pageable pageable) {
+        return null;
     }
 
     @Override
@@ -122,23 +124,5 @@ public class UserService implements UserServiceinterface {
         Date expiredDate = Date.from(LocalDateTime.now().plusYears(1).atZone(ZoneId.systemDefault()).toInstant());
         JwtAuthToken refreshToken = jwtAuthTokenProvider.createAuthToken(id, Role.USER.getCode(),expiredDate);
         return refreshToken.getToken();
-    }
-
-    @Override
-    public Page<ResponseUser.UserSearch> getUserSearch(String type, String keyword, Pageable pageable){
-        Page<User> users_null = Page.empty();
-        if(!keyword.isEmpty()){
-            if(type.equals("mbti")){
-                //mbti로 검색했을 경우
-                Page<User> users_mbti = userRepository.findByMbti(MBTIType.valueOf(keyword.toUpperCase()), pageable);
-                return users_mbti.map(ResponseUser.UserSearch::of);
-            }
-            else{
-                //nickname으로 검색했을 경우
-                Page<User> user_nick = userRepository.findByNickname(keyword,pageable);
-                return user_nick.map(ResponseUser.UserSearch::of);
-            }
-        }
-        return  users_null.map(ResponseUser.UserSearch::of);
     }
 }
