@@ -15,10 +15,12 @@ import com.ting.ting.web.dto.RequestUser;
 import com.ting.ting.web.dto.ResponseUser;
 import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.websocket.AuthenticationException;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
+import java.awt.print.Pageable;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
@@ -120,5 +122,23 @@ public class UserService implements UserServiceinterface {
         Date expiredDate = Date.from(LocalDateTime.now().plusYears(1).atZone(ZoneId.systemDefault()).toInstant());
         JwtAuthToken refreshToken = jwtAuthTokenProvider.createAuthToken(id, Role.USER.getCode(),expiredDate);
         return refreshToken.getToken();
+    }
+
+    @Override
+    public Page<ResponseUser.UserSearch> getUserSearch(String type, String keyword, Pageable pageable){
+        Page<User> users_null = Page.empty();
+        if(!keyword.isEmpty()){
+            if(type.equals("mbti")){
+                //mbti로 검색했을 경우
+                Page<User> users_mbti = userRepository.findByMbti(MBTIType.valueOf(keyword.toUpperCase()), pageable);
+                return users_mbti.map(ResponseUser.UserSearch::of);
+            }
+            else{
+                //nickname으로 검색했을 경우
+                Page<User> user_nick = userRepository.findByNickname(keyword,pageable);
+                return user_nick.map(ResponseUser.UserSearch::of);
+            }
+        }
+        return  users_null.map(ResponseUser.UserSearch::of);
     }
 }
