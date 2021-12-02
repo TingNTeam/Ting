@@ -87,6 +87,23 @@ public class UserService implements UserServiceinterface {
         return  Optional.ofNullable(login);
     }
 
+    @Transactional
+    @Override
+    public void mbtiupdate(MBTIType mbti, String email){
+        //유저 엔티티를 꺼낸다
+        User user = userRepository.findByEmail(email);
+
+        if(user == null) {
+            throw new CustomJwtRuntimeException();
+        }
+        user.mbtiupdate(mbti);
+    }
+
+    @Override
+    public Page<ResponseUser.UserSearch> getUserSearch(String type, String keyword, Pageable pageable) {
+        return null;
+    }
+
     @Override
     public String createAccessToken(String id){
         //만료 기간 설정 (생성으로부터 30분동안)

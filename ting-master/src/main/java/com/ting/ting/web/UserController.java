@@ -1,8 +1,10 @@
 package com.ting.ting.web;
 
 import com.ting.ting.entity.User;
+import com.ting.ting.exception.errors.CustomJwtRuntimeException;
 import com.ting.ting.exception.errors.LoginFailedException;
 import com.ting.ting.exception.errors.RegisterFailedException;
+import com.ting.ting.provider.security.JwtAuthToken;
 import com.ting.ting.provider.service.UserService;
 import com.ting.ting.provider.security.JwtAuthTokenProvider;
 import com.ting.ting.provider.service.UserService;
@@ -22,9 +24,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.HashMap;
+import java.util.Optional;
 import java.util.List;
 import javax.validation.Valid;
 
@@ -81,4 +85,23 @@ public class UserController {
                 .build();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    //MBTI 등록 및 업데이트
+    @PostMapping("/user/mbti/update")
+    public ResponseEntity<CommonResponse> mbtiUpdate(HttpServletRequest request, @Valid @RequestBody RequestUser.MbtiUpdate mbti){
+        Optional<String> token = jwtAuthTokenProvider.resolveToken(request);
+        String email = null;
+        if(token.isPresent()) {
+            JwtAuthToken jwtAuthToken = jwtAuthTokenProvider.convertAuthToken(token.get());
+            email = jwtAuthToken.getData().getSubject();
+        }
+        userService.mbtiupdate(mbti.getMbti(), email);
+
+        CommonResponse response = CommonResponse.builder()
+                .status(HttpStatus.OK.value())
+                .message("성공")
+                .build();
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
 }
