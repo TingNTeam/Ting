@@ -100,6 +100,22 @@ public class UserService implements UserServiceinterface {
         user.updatembti(mbti);
     }
 
+    @Transactional
+    @Override
+    public ResponseUser.MyinfoList MyinfoList(String email){
+        //유저 엔티티를 꺼낸다
+        User user = userRepository.findByEmail(email);
+        ResponseUser.MyinfoList infolist = ResponseUser.MyinfoList.builder()
+                .email(user.getEmail())
+                .name(user.getName())
+                .nickname(user.getNickname())
+                .mbti(user.getMbti())
+                .birth(user.getBirth())
+                .build();
+        return infolist;
+
+    }
+
     @Override
     public String createAccessToken(String id){
         //만료 기간 설정 (생성으로부터 30분동안)

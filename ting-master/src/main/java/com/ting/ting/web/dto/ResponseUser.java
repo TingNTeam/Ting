@@ -30,4 +30,15 @@ public class ResponseUser {
                     .build();
         }
     }
+
+    @Builder
+    @Data
+    public static class MyinfoList {
+        private String email;
+        private String name;
+        private String nickname;
+        private MBTIType mbti;
+        private String birth;
+    }
+
 }

@@ -118,4 +118,21 @@ public class UserController {
                 .build();
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
+    //내정보 조회
+    @GetMapping("/user/myinfo/list")
+    public ResponseEntity<CommonResponse> myinfoList(HttpServletRequest request){
+        String token = jwtAuthTokenProvider.resolveToken(request).orElseThrow(()->new CustomJwtRuntimeException());
+        JwtAuthToken jwtAuthToken = jwtAuthTokenProvider.convertAuthToken(token);
+        String email = jwtAuthToken.getData().getSubject();
+        ResponseUser.MyinfoList myinfo= userService.MyinfoList(email);
+
+        CommonResponse response = CommonResponse.builder()
+                .status(HttpStatus.OK.value())
+                .message("성공")
+                .list(myinfo)
+                .build();
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
 }

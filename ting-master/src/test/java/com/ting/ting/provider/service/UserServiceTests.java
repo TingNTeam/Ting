@@ -1,8 +1,6 @@
 package com.ting.ting.provider.service;
 
 import com.ting.ting.core.type.MBTIType;
-import com.ting.ting.entity.User;
-import com.ting.ting.repository.UserRepository;
 import com.ting.ting.web.dto.RequestUser;
 import com.ting.ting.web.dto.ResponseUser;
 import org.junit.jupiter.api.DisplayName;
@@ -90,5 +88,23 @@ public class UserServiceTests {
         User user1 = userRepository.findByEmail(dto1.getEmail());
         System.out.println("변경된 후");
         System.out.println(user1.getEmail()+"  "+user1.getPassword()+"  "+user1.getNickname());
+    }
+    @Test
+    @DisplayName("내정보 조회 테스트")
+    @Transactional
+    void MyinfoList() {
+        RequestUser.Register dto = RequestUser.Register.builder()
+                .email("1234")
+                .password("1234")
+                .name("name1")
+                .nickname("nick1")
+                .birth("1234")
+                .build();
+        userService.register(dto);
+
+        userService.Updatembti(MBTIType.ESTJ, dto.getEmail());
+
+        ResponseUser.MyinfoList list=userService.MyinfoList(dto.getEmail());
+        System.out.println(list);
     }
 }

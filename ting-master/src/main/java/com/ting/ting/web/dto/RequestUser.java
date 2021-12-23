@@ -48,6 +48,7 @@ public class RequestUser {
         private MBTIType mbti;
     }
 
+
     @Builder
     @Data
     public static class myinfo{
