@@ -14,13 +14,11 @@ import com.ting.ting.util.SHA256Util;
 import com.ting.ting.web.dto.RequestUser;
 import com.ting.ting.web.dto.ResponseUser;
 import lombok.RequiredArgsConstructor;
-import org.apache.tomcat.websocket.AuthenticationException;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
-import java.awt.print.Pageable;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
@@ -103,11 +101,6 @@ public class UserService implements UserServiceinterface {
     }
 
     @Override
-    public Page<ResponseUser.UserSearch> getUserSearch(String type, String keyword, Pageable pageable) {
-        return null;
-    }
-
-    @Override
     public String createAccessToken(String id){
         //만료 기간 설정 (생성으로부터 30분동안)
         //Instant -> 컴퓨터가 알아보기 쉽게 표현하기 위한 형태
@@ -124,5 +117,18 @@ public class UserService implements UserServiceinterface {
         Date expiredDate = Date.from(LocalDateTime.now().plusYears(1).atZone(ZoneId.systemDefault()).toInstant());
         JwtAuthToken refreshToken = jwtAuthTokenProvider.createAuthToken(id, Role.USER.getCode(),expiredDate);
         return refreshToken.getToken();
+    }
+
+    @Override
+    @Transactional
+    public Page<ResponseUser.UserSearch> getUserSearch(String type, String keyword, Pageable pageable){
+            if(type.equals("mbti")){
+                //mbti로 검색했을 경우
+                Page<User> users_mbti = userRepository.findByMbti(MBTIType.valueOf(keyword.toUpperCase()), pageable);
+                return users_mbti.map(ResponseUser.UserSearch::of);
+            }
+                //nickname으로 검색했을 경우
+                Page<User> user_nick = userRepository.findByNickname(keyword,pageable);
+                return user_nick.map(ResponseUser.UserSearch::of);
     }
 }

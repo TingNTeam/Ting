@@ -18,6 +18,7 @@ import com.ting.ting.web.dto.RequestUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +27,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import java.awt.print.Pageable;
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.List;
@@ -85,7 +85,6 @@ public class UserController {
                 .build();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-
     //MBTI 등록 및 업데이트
     @PostMapping("/user/update/mbti")
     public ResponseEntity<CommonResponse> mbtiUpdate(HttpServletRequest request, @Valid @RequestBody RequestUser.UpdateMbti mbti){

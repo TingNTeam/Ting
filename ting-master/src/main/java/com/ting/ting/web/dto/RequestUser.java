@@ -47,4 +47,5 @@ public class RequestUser {
     public static class UpdateMbti{
         private MBTIType mbti;
     }
+
 }
