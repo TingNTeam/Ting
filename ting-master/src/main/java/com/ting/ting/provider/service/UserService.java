@@ -92,7 +92,7 @@ public class UserService implements UserServiceinterface {
 
     @Transactional
     @Override
-    public void mbtiupdate(MBTIType mbti, String email){
+    public void mbtiUpdate(MBTIType mbti, String email){
         //유저 엔티티를 꺼낸다
         User user = userRepository.findByEmail(email);
 
