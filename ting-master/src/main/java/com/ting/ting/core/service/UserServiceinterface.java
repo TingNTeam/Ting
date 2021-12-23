@@ -14,5 +14,6 @@ public interface UserServiceinterface {
     String createAccessToken(String id);
     String createRefreshToken(String id);
     void Updatembti(MBTIType mbti,String email);
+    public ResponseUser.MyinfoList MyinfoList(String email);
     Page<ResponseUser.UserSearch> getUserSearch(String type, String keyword, Pageable pageable);
 }

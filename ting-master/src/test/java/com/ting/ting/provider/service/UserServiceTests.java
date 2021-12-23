@@ -32,7 +32,7 @@ public class UserServiceTests {
                 .birth("1234")
                 .build();
         userService.register(dto1);
-        userService.mbtiupdate(MBTIType.ESTJ, dto1.getEmail());
+        userService.Updatembti(MBTIType.ESTJ, dto1.getEmail());
 
         RequestUser.Register dto2 = RequestUser.Register.builder()
                 .email("12345")
@@ -42,7 +42,7 @@ public class UserServiceTests {
                 .birth("2345")
                 .build();
         userService.register(dto2);
-        userService.mbtiupdate(MBTIType.ESTJ, dto2.getEmail());
+        userService.Updatembti(MBTIType.ESTJ, dto2.getEmail());
         Pageable pageable = PageRequest.of(0,2);
         //닉네임으로 검색
         Page<ResponseUser.UserSearch> list1 = userService.getUserSearch("user","nick2", pageable);
@@ -55,5 +55,23 @@ public class UserServiceTests {
             System.out.println(searchlist2.getNickname()+"  "+ searchlist2.getBirth()+"  "+searchlist2.getMbti());
         }
 
+    }
+    @Test
+    @DisplayName("내정보 조회 테스트")
+    @Transactional
+    void MyinfoList() {
+        RequestUser.Register dto = RequestUser.Register.builder()
+                .email("1234")
+                .password("1234")
+                .name("name1")
+                .nickname("nick1")
+                .birth("1234")
+                .build();
+        userService.register(dto);
+
+        userService.Updatembti(MBTIType.ESTJ, dto.getEmail());
+
+        ResponseUser.MyinfoList list=userService.MyinfoList(dto.getEmail());
+        System.out.println(list);
     }
 }
