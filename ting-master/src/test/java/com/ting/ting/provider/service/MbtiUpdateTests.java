@@ -35,7 +35,7 @@ public class MbtiUpdateTests {
         userService.register(dto);
         User user = userRepository.findByEmail(dto.getEmail());
         //then
-        userService.mbtiUpdate(MBTIType.ENFJ, user.getEmail());
+        userService.Updatembti(MBTIType.ENFJ, user.getEmail());
 
         System.out.println(user.getMbti());
         System.out.println("dto.getMbti()");

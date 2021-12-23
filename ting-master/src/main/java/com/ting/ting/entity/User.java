@@ -59,6 +59,11 @@ public class User {
     public void updatembti(MBTIType mbti){
         this.mbti = mbti;
     }
+
+    public void updateMyInFo(String password, String nickname){
+        this.password = password;
+        this. nickname = nickname;
+    }
     public void changeRefreshToken(String refreshToken){
         this.refreshToken = refreshToken;
     }

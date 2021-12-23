@@ -15,4 +15,5 @@ public interface UserServiceinterface {
     String createRefreshToken(String id);
     void Updatembti(MBTIType mbti,String email);
     Page<ResponseUser.UserSearch> getUserSearch(String type, String keyword, Pageable pageable);
+    void updatemyinfo(String email, String password, String nickname);
 }
