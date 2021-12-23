@@ -2,8 +2,10 @@ package com.ting.ting.web.dto;
 
 import com.ting.ting.core.security.role.Role;
 import com.ting.ting.core.type.MBTIType;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.EnumType;
@@ -40,7 +42,9 @@ public class RequestUser {
 
     @Builder
     @Data
-    public static class MbtiUpdate{
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class UpdateMbti{
         private MBTIType mbti;
     }
 }

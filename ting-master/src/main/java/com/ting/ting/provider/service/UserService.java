@@ -92,14 +92,14 @@ public class UserService implements UserServiceinterface {
 
     @Transactional
     @Override
-    public void mbtiupdate(MBTIType mbti, String email){
+    public void Updatembti(MBTIType mbti, String email){
         //유저 엔티티를 꺼낸다
         User user = userRepository.findByEmail(email);
 
         if(user == null) {
             throw new CustomJwtRuntimeException();
         }
-        user.mbtiupdate(mbti);
+        user.updatembti(mbti);
     }
 
     @Override

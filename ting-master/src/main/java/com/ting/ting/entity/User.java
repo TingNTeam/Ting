@@ -56,7 +56,7 @@ public class User {
         this.mbti = mbti;
     }
 
-    public void mbtiupdate(MBTIType mbti){
+    public void updatembti(MBTIType mbti){
         this.mbti = mbti;
     }
     public void changeRefreshToken(String refreshToken){

@@ -13,6 +13,6 @@ public interface UserServiceinterface {
     Optional<ResponseUser.Login> login(RequestUser.Login requestLoginDto);
     String createAccessToken(String id);
     String createRefreshToken(String id);
-    void mbtiupdate(MBTIType mbti,String email);
+    void Updatembti(MBTIType mbti,String email);
     Page<ResponseUser.UserSearch> getUserSearch(String type, String keyword, Pageable pageable);
 }
