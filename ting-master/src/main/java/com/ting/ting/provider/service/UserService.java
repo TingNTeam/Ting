@@ -147,4 +147,23 @@ public class UserService implements UserServiceinterface {
                 Page<User> user_nick = userRepository.findByNickname(keyword,pageable);
                 return user_nick.map(ResponseUser.UserSearch::of);
     }
+
+    @Override
+    @Transactional
+    public void updatemyinfo(String email, String password, String nickname){
+        User user = userRepository.findByEmail(email);
+        if(user == null) {
+            throw new CustomJwtRuntimeException();
+        }
+        String newpassword = user.getPassword();
+        String newnickname = user.getNickname();
+        if(password != null){
+            //암호화
+         newpassword = SHA256Util.getEncrypt(password, user.getSalt());
+        }
+        if(nickname != null){
+            newnickname = nickname;
+        }
+        user.updateMyInFo(newpassword,newnickname);
+    }
 }

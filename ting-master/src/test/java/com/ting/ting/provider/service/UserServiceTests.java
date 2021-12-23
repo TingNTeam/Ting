@@ -19,6 +19,9 @@ public class UserServiceTests {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @Test
     @DisplayName("검색 기능 테스트")
     @Transactional
@@ -55,6 +58,36 @@ public class UserServiceTests {
             System.out.println(searchlist2.getNickname()+"  "+ searchlist2.getBirth()+"  "+searchlist2.getMbti());
         }
 
+    }
+
+    @Test
+    @DisplayName("내정보 수정")
+    @Transactional
+    void updatemyinfoTest(){
+        //회원 등록
+        RequestUser.Register dto1 = RequestUser.Register.builder()
+                .email("1234")
+                .password("1234")
+                .name("name1")
+                .nickname("nick1")
+                .birth("1234")
+                .build();
+        userService.register(dto1);
+        //로그인
+        RequestUser.Login dto2 = RequestUser.Login.builder()
+                .email("1234")
+                .password("1234").build();
+        userService.login(dto2);
+
+        User user = userRepository.findByEmail(dto1.getEmail());
+        System.out.println("변경 전");
+        System.out.println(user.getEmail()+"  "+user.getPassword()+"  "+user.getNickname());
+        //정보 수정
+        userService.updatemyinfo(dto1.getEmail(),"123456",null);
+
+        User user1 = userRepository.findByEmail(dto1.getEmail());
+        System.out.println("변경된 후");
+        System.out.println(user1.getEmail()+"  "+user1.getPassword()+"  "+user1.getNickname());
     }
     @Test
     @DisplayName("내정보 조회 테스트")

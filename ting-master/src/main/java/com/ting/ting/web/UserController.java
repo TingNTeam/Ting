@@ -100,7 +100,24 @@ public class UserController {
                 .build();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+    //내정보 수정
+    @PostMapping("/user/myinfo/update")
+    public ResponseEntity<CommonResponse>UpdateMyinfo(HttpServletRequest request,
+                                                      @RequestBody RequestUser.myinfo myinfo){
+        Optional<String> token = jwtAuthTokenProvider.resolveToken(request);
+        String email = null;
+        if(token.isPresent()){
+            JwtAuthToken jwtAuthToken = jwtAuthTokenProvider.convertAuthToken(token.get());
+            email= jwtAuthToken.getData().getSubject();
+        }
+        userService.updatemyinfo(email, myinfo.getPassword(), myinfo.getNickname());
 
+        CommonResponse response = CommonResponse.builder()
+                .status(HttpStatus.OK.value())
+                .message("성공")
+                .build();
+        return new ResponseEntity<>(response,HttpStatus.OK);
+    }
     //내정보 조회
     @GetMapping("/user/myinfo/list")
     public ResponseEntity<CommonResponse> myinfoList(HttpServletRequest request){
