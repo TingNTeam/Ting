@@ -4,6 +4,7 @@ import com.ting.ting.core.security.role.Role;
 import com.ting.ting.core.service.UserServiceinterface;
 import com.ting.ting.core.type.MBTIType;
 import com.ting.ting.entity.User;
+import com.ting.ting.exception.errors.CustomJwtRuntimeException;
 import com.ting.ting.exception.errors.LoginFailedException;
 import com.ting.ting.exception.errors.RegisterFailedException;
 import com.ting.ting.provider.security.JwtAuthToken;
@@ -100,11 +101,6 @@ public class UserService implements UserServiceinterface {
     }
 
     @Override
-    public Page<ResponseUser.UserSearch> getUserSearch(String type, String keyword, Pageable pageable) {
-        return null;
-    }
-
-    @Override
     public String createAccessToken(String id){
         //만료 기간 설정 (생성으로부터 30분동안)
         //Instant -> 컴퓨터가 알아보기 쉽게 표현하기 위한 형태
@@ -128,11 +124,9 @@ public class UserService implements UserServiceinterface {
     public Page<ResponseUser.UserSearch> getUserSearch(String type, String keyword, Pageable pageable){
             if(type.equals("mbti")){
                 //mbti로 검색했을 경우
-                //MBTIType.valueOf(keyword.toUpperCase())
-                Page<User> users_mbti = userRepository.findByMbti(MBTIType.ESTJ, pageable);
+                Page<User> users_mbti = userRepository.findByMbti(MBTIType.valueOf(keyword.toUpperCase()), pageable);
                 return users_mbti.map(ResponseUser.UserSearch::of);
             }
-
                 //nickname으로 검색했을 경우
                 Page<User> user_nick = userRepository.findByNickname(keyword,pageable);
                 return user_nick.map(ResponseUser.UserSearch::of);

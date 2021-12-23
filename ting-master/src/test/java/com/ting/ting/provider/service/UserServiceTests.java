@@ -32,6 +32,8 @@ public class UserServiceTests {
                 .birth("1234")
                 .build();
         userService.register(dto1);
+        userService.mbtiupdate(MBTIType.ESTJ, dto1.getEmail());
+
         RequestUser.Register dto2 = RequestUser.Register.builder()
                 .email("12345")
                 .password("12345")
@@ -40,14 +42,13 @@ public class UserServiceTests {
                 .birth("2345")
                 .build();
         userService.register(dto2);
-
+        userService.mbtiupdate(MBTIType.ESTJ, dto2.getEmail());
         Pageable pageable = PageRequest.of(0,2);
         //닉네임으로 검색
         Page<ResponseUser.UserSearch> list1 = userService.getUserSearch("user","nick2", pageable);
         for (ResponseUser.UserSearch searchlist1 : list1){
             System.out.println(searchlist1.getNickname()+"  "+ searchlist1.getBirth()+"  "+searchlist1.getMbti());
         }
-
         //MBTI로 검색
         Page<ResponseUser.UserSearch> list2 = userService.getUserSearch("mbti","estj",pageable);
         for (ResponseUser.UserSearch searchlist2 : list2){

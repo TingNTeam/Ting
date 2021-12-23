@@ -85,7 +85,6 @@ public class UserController {
                 .build();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-
     //MBTI 등록 및 업데이트
     @PostMapping("/user/mbti/update")
     public ResponseEntity<CommonResponse> mbtiUpdate(HttpServletRequest request, @Valid @RequestBody RequestUser.MbtiUpdate mbti){
