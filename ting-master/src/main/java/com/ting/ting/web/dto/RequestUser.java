@@ -44,7 +44,7 @@ public class RequestUser {
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class MbtiUpdate{
+    public static class UpdateMbti{
         private MBTIType mbti;
     }
 }

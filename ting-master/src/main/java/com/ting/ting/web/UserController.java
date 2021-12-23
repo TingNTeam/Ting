@@ -87,13 +87,13 @@ public class UserController {
     }
 
     //MBTI 등록 및 업데이트
-    @PostMapping("/user/mbti/update")
-    public ResponseEntity<CommonResponse> mbtiUpdate(HttpServletRequest request, @Valid @RequestBody RequestUser.MbtiUpdate mbti){
+    @PostMapping("/user/update/mbti")
+    public ResponseEntity<CommonResponse> mbtiUpdate(HttpServletRequest request, @Valid @RequestBody RequestUser.UpdateMbti mbti){
         String token = jwtAuthTokenProvider.resolveToken(request).orElseThrow(()->new CustomJwtRuntimeException());
         JwtAuthToken jwtAuthToken = jwtAuthTokenProvider.convertAuthToken(token);
         String email = jwtAuthToken.getData().getSubject();
 
-        userService.mbtiUpdate(mbti.getMbti(), email);
+        userService.Updatembti(mbti.getMbti(), email);
 
         CommonResponse response = CommonResponse.builder()
                 .status(HttpStatus.OK.value())
