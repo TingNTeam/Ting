@@ -70,6 +70,7 @@ public class UserController {
                 .build();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
     //검색
     @GetMapping("/user/search")
     private ResponseEntity<CommonResponse> getSearchList(
@@ -90,7 +91,7 @@ public class UserController {
     public ResponseEntity<CommonResponse> mbtiUpdate(HttpServletRequest request, @Valid @RequestBody RequestUser.UpdateMbti mbti){
         String token = jwtAuthTokenProvider.resolveToken(request).orElseThrow(()->new CustomJwtRuntimeException());
         JwtAuthToken jwtAuthToken = jwtAuthTokenProvider.convertAuthToken(token);
-        String email = jwtAuthToken.getData().getSubject();
+        String email = jwtAuthToken.getData().getSubject();     //토큰으로 email꺼내기
 
         userService.Updatembti(mbti.getMbti(), email);
 
