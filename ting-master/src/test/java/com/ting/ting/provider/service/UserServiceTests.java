@@ -1,6 +1,8 @@
 package com.ting.ting.provider.service;
 
 import com.ting.ting.core.type.MBTIType;
+import com.ting.ting.entity.User;
+import com.ting.ting.repository.UserRepository;
 import com.ting.ting.web.dto.RequestUser;
 import com.ting.ting.web.dto.ResponseUser;
 import org.junit.jupiter.api.DisplayName;
